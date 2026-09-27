@@ -7,6 +7,7 @@ struct QingQiApp: App {
 
 struct QingQiRootView: View {
     @StateObject private var model = QingQiAppModel()
+    @AppStorage("appearance") private var appearance = 0
     @State private var tab = 0
     var body: some View {
         VStack(spacing: 0) {
@@ -19,5 +20,6 @@ struct QingQiRootView: View {
             }.tint(QingQiColors.accent)
         }
         .task { await model.loadLocalData(); await model.refresh() }
+        .preferredColorScheme(appearance == 1 ? .light : appearance == 2 ? .dark : nil)
     }
 }
