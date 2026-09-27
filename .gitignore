@@ -8,6 +8,10 @@ DerivedData/
 *.ipa
 QingQi-unsigned-artifact-*.zip
 QingQi-unsigned-*/
+QingQi-urlfilter-*/
+QingQi-urlfilter-artifact-*.zip
+build-urlfilter-ci*.log
+sample-test.bin
 *.p12
 *.p8
 *.mobileprovision
