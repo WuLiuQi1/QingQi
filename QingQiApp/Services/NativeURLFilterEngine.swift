@@ -18,7 +18,7 @@ public struct NativeURLFilterEngine: FilterEngine, Sendable {
 
     public func readSnapshot() async throws -> FilterSnapshot {
         try await manager.loadFromPreferences()
-        return snapshot(for: manager.status)
+        return snapshot(for: await manager.status)
     }
 
     public func requestEnable() async throws -> ConfigurationAttempt {
@@ -41,7 +41,7 @@ public struct NativeURLFilterEngine: FilterEngine, Sendable {
         manager.isEnabled = false
         try await manager.saveToPreferences()
         try await manager.loadFromPreferences()
-        return snapshot(for: manager.status)
+        return snapshot(for: await manager.status)
     }
 
     public func removeConfiguration() async throws -> FilterSnapshot {
