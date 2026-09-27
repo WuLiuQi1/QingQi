@@ -1,0 +1,6 @@
+measurement,unit,value,status,notes
+pir_request_bytes,bytes,,blocked,no PIR service or iOS SDK
+pir_response_bytes,bytes,,blocked,no PIR service or iOS SDK
+pir_cpu_ms,milliseconds,,blocked,no server measurement
+prefilter_bytes,bytes,,blocked,no Bloom artifact
+daily_calls,calls/day,,blocked,N/T/h/c/b not measured

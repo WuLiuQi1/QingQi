@@ -1,0 +1,73 @@
+name: Build unsigned iPhone IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'QingQiApp/**'
+      - 'Core/**'
+      - 'xcodegen.yml'
+      - '.github/workflows/ios-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain information
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+          swift --version
+      - name: Core tests
+        run: |
+          mkdir -p build
+          set -o pipefail
+          swift test --package-path Core 2>&1 | tee build/core-test.log
+      - name: Generate project
+        run: |
+          brew install xcodegen
+          xcodegen --version
+          xcodegen generate --spec xcodegen.yml
+      - name: Build unsigned device app
+        run: |
+          set -o pipefail
+          xcodebuild -project QingQi.xcodeproj -scheme QingQi \
+            -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY='' build 2>&1 | tee build/xcodebuild.log
+      - name: Package IPA for external signing
+        run: |
+          mkdir -p build/package/Payload
+          ditto build/DerivedData/Build/Products/Release-iphoneos/QingQi.app build/package/Payload/QingQi.app
+          test -f build/package/Payload/QingQi.app/Info.plist
+          test -x build/package/Payload/QingQi.app/QingQi
+          file build/package/Payload/QingQi.app/QingQi
+          /usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' build/package/Payload/QingQi.app/Info.plist
+          cd build/package
+          zip -qry ../QingQi-unsigned.ipa Payload
+          cd ..
+          shasum -a 256 QingQi-unsigned.ipa > QingQi-unsigned.ipa.sha256
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: QingQi-unsigned-iphoneos
+          path: |
+            build/QingQi-unsigned.ipa
+            build/QingQi-unsigned.ipa.sha256
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build/*.log
+          if-no-files-found: ignore

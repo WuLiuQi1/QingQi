@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "dataset_id": "demo-20260926",
+  "profile_id": "baseline",
+  "shipping_eligible": false,
+  "notice": "仅供设计与测试，非真实广告规则，不得发布为生产规则",
+  "rules": [
+    {
+      "id": "demo-domain-001",
+      "action": "block",
+      "match": {
+        "kind": "host_suffix",
+        "value": "ads.example.com"
+      },
+      "scope": "global",
+      "category": "advertising",
+      "source": {
+        "kind": "illustrative",
+        "license_reviewed": false
+      },
+      "verification": {
+        "status": "not_tested",
+        "app_names_are_metadata_only": true
+      }
+    },
+    {
+      "id": "demo-exception-001",
+      "action": "exclude",
+      "match": {
+        "kind": "host_suffix",
+        "value": "account.ads.example.com"
+      },
+      "scope": "publisher_compile_time",
+      "note": "与父域阻止重叠时，保守抑制父规则；不承诺即时个人白名单"
+    }
+  ]
+}

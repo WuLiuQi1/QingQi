@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>轻启 QingQi · 交互设计原型</title>
+<style>
+:root{color-scheme:light;--canvas:#e9eee8;--outer-ink:#16352d;--outer-muted:#65786c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--outer-ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+button,input{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:3px solid #42997d;outline-offset:4px}
+button:disabled{cursor:default;opacity:.55}
+svg{width:24px;height:24px;display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden}
+.showcase{max-width:1120px;min-height:100vh;display:grid;grid-template-columns:1fr 420px;gap:70px;align-items:center;margin:auto;padding:46px 40px}
+.brand{display:flex;align-items:center;gap:12px;font-size:21px;font-weight:700}
+.brand-mark{width:46px;height:46px;border-radius:15px;background:#0b6d58;color:white;display:grid;place-items:center}
+.eyebrow{margin-top:68px;letter-spacing:.15em;font-size:11px;font-weight:700;color:#64796c}
+.editorial h1{font-size:58px;line-height:1.22;letter-spacing:-.06em;margin:18px 0 25px;font-weight:750}
+.editorial .intro{font-size:15px;line-height:1.9;max-width:370px;color:var(--outer-muted)}
+.design-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px}
+.design-tabs button{border:1px solid #cdd9cf;background:transparent;border-radius:99px;padding:10px 17px;color:#536b5c;font-size:13px;min-height:44px}
+.design-tabs button.active{background:#16352d;border-color:#16352d;color:#fff}
+.swatches{display:flex;align-items:center;gap:9px;margin-top:38px}
+.swatch{width:18px;height:18px;border-radius:50%;border:1px solid #0001}
+.swatches span:last-child{font-size:11px;margin-left:5px;color:#64786a}
+.disclaimer{font-size:11px;line-height:1.8;color:#65796b;max-width:375px;border-top:1px solid #cfdbd0;margin-top:30px;padding-top:18px}
+.device{--bg:#f4f6f3;--surface:#fff;--ink:#16352d;--muted:#5b7067;--accent:#086f5a;--soft:#e5f2eb;--line:#dee7e1;--button-text:#fff;--warning:#8c5705;--warning-bg:#fbf2de;width:390px;height:836px;border:7px solid #26332b;border-radius:48px;box-shadow:0 24px 64px #193b2420,0 3px 7px #193b2412;overflow:hidden;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;position:relative}
+.device[data-theme=dark]{color-scheme:dark;--bg:#101916;--surface:#1a2722;--ink:#f0f7f2;--muted:#afc2b8;--accent:#83d9b6;--soft:#203e32;--line:#32473c;--button-text:#16352d;--warning:#f0c279;--warning-bg:#3e321d;border-color:#26332b}
+.status-bar{height:43px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:4px 24px 0;font-size:12px;font-weight:700;position:relative;color:var(--ink)}
+.island{position:absolute;left:50%;transform:translateX(-50%);top:9px;width:100px;height:24px;background:#18251e;border-radius:20px}
+.status-icons{display:flex;align-items:center;gap:5px}
+.status-icons svg{width:15px;height:15px;stroke-width:2}
+.battery{width:22px;height:10px;border:1px solid currentColor;border-radius:3px;padding:1px;position:relative}
+.battery:after{content:"";position:absolute;width:2px;height:4px;right:-4px;top:2px;background:currentColor;border-radius:1px}
+.battery:before{content:"";display:block;width:83%;height:100%;border-radius:1px;background:currentColor}
+.demo-banner{flex-shrink:0;margin:8px 18px 0;padding:7px 8px;text-align:center;color:var(--accent);background:var(--soft);border-radius:9px;font-size:10px;font-weight:550;letter-spacing:.015em}
+.page-header{padding:17px 20px 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.page-title{font-size:29px;line-height:1.25;font-weight:750;letter-spacing:-.045em;margin:0}
+.header-sub{font-size:11px;color:var(--muted);margin-top:6px}
+.header-icon{width:38px;height:38px;border-radius:14px;display:grid;place-items:center;color:var(--accent);background:var(--soft)}
+.viewport{flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:0 18px 18px}
+.viewport::-webkit-scrollbar{display:none}
+.page{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:23px;padding:18px}
+.hero{padding:23px 21px 20px;position:relative;overflow:hidden;border-color:transparent;background:linear-gradient(145deg,var(--surface) 40%,var(--soft))}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+.hero-icon{display:grid;place-items:center;width:61px;height:61px;border-radius:21px;background:var(--soft);color:var(--accent)}
+.hero-icon svg{width:34px;height:34px;stroke-width:1.55}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border:1px solid var(--line);background:var(--surface);border-radius:99px;color:var(--muted);font-size:10px;font-weight:550;white-space:nowrap}
+.chip i{width:5px;height:5px;background:var(--muted);border-radius:50%}
+.chip.enabled{color:var(--accent);border-color:var(--soft)}
+.chip.enabled i{background:var(--accent)}
+.hero h2{font-size:29px;letter-spacing:-.05em;line-height:1.4;margin:0 0 10px;font-weight:750;position:relative}
+.hero p{font-size:12px;color:var(--muted);line-height:1.8;margin:0 0 21px;max-width:260px}
+.primary{border:0;background:var(--accent);color:var(--button-text);width:100%;padding:14px 10px;min-height:49px;border-radius:15px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:650}
+.primary svg{width:16px;height:16px}
+.section-title{font-size:13px;font-weight:700;margin:0 0 14px;display:flex;align-items:center;justify-content:space-between}
+.section-title .small{font-size:10px;font-weight:400;color:var(--muted)}
+.info-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:11px;line-height:1.6}
+.info-row:first-of-type{padding-top:0}
+.info-row:last-child{padding-bottom:0;border:0}
+.info-row .label{color:var(--muted)}
+.info-row .value{color:var(--ink);font-weight:550;text-align:right}
+.info-row .sub{font-size:10px;display:block;color:var(--muted);font-weight:400}
+.notice{border-radius:17px;background:var(--soft);display:flex;align-items:flex-start;gap:10px;padding:15px}
+.notice svg{flex-shrink:0;width:18px;height:18px;color:var(--accent);margin-top:1px}
+.notice h3{font-size:11px;margin:0 0 5px;font-weight:650}
+.notice p{font-size:10px;line-height:1.85;margin:0;color:var(--muted)}
+.text-action{display:flex;justify-content:center;align-items:center;gap:7px;border:0;background:none;color:var(--accent);font-size:12px;min-height:44px;font-weight:550}
+.text-action svg{width:17px;height:17px}
+.tabbar{flex-shrink:0;border-top:1px solid var(--line);background:var(--surface);padding:9px 12px 4px;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabbar button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10px;min-height:48px;padding:0}
+.tabbar button svg{width:22px;height:22px}
+.tabbar button.active{color:var(--accent);font-weight:700}
+.tabbar button.active .tab-icon{background:var(--soft)}
+.tab-icon{padding:4px 14px;border-radius:13px}
+.home-indicator{height:17px;flex-shrink:0;background:var(--surface);display:flex;align-items:center;justify-content:center}
+.home-indicator:before{content:"";height:4px;width:108px;border-radius:9px;background:var(--ink)}
+.pack-title{display:flex;gap:11px;align-items:center;margin-bottom:12px}
+.pack-icon{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--soft);color:var(--accent)}
+.pack-title h2{font-size:16px;margin:0 0 4px}
+.caption{font-size:10px;color:var(--muted);line-height:1.8}
+.pack-description{font-size:12px;line-height:1.8;color:var(--muted);margin:0 0 15px}
+.mini-line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mini-tag{color:var(--accent);background:var(--soft);border-radius:7px;font-size:10px;padding:5px 8px}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;width:17px;height:17px;left:13px;top:13px;color:var(--muted)}
+.search{border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--ink);width:100%;padding:12px 14px 12px 39px;font-size:12px;min-height:44px}
+.search::placeholder{color:var(--muted)}
+.rule-list{display:flex;flex-direction:column;gap:10px}
+.rule-card{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:18px;padding:16px 14px;text-align:left;width:100%;min-height:82px}
+.rule-card .rule-number{width:29px;height:29px;border-radius:10px;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-size:11px;flex-shrink:0}
+.rule-text{min-width:0;flex:1}
+.rule-text strong{font-size:12px;font-weight:600;display:block;margin-bottom:6px}
+.rule-text code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;color:var(--muted);overflow-wrap:anywhere}
+.rule-card>svg{width:14px;height:14px;color:var(--muted);flex-shrink:0}
+.small-heading{font-size:12px;font-weight:650;margin:5px 0 0}
+.diag-hero .hero-top{margin-bottom:20px}
+.diag-hero h2{font-size:23px}
+.check-row{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
+.check-row:last-child{border:0;padding-bottom:0}
+.check-row:first-of-type{padding-top:0}
+.check-icon{width:28px;height:28px;border-radius:9px;color:var(--muted);background:var(--bg);display:grid;place-items:center;flex-shrink:0}
+.check-icon svg{width:15px;height:15px}
+.check-icon.success{background:var(--soft);color:var(--accent)}
+.check-body{flex:1;min-width:0}
+.check-body strong{font-size:11px;font-weight:550}
+.check-body p{font-size:10px;margin:4px 0 0;color:var(--muted);line-height:1.5}
+.check-label{font-size:10px;color:var(--muted)}
+.check-label.success{color:var(--accent)}
+.segmented{display:grid;grid-template-columns:repeat(3,1fr);padding:4px;gap:4px;background:var(--bg);border-radius:12px}
+.segmented button{border:0;background:none;border-radius:9px;color:var(--muted);font-size:11px;min-height:37px}
+.segmented button.active{background:var(--surface);color:var(--ink);box-shadow:0 2px 6px #0000000a;font-weight:600}
+.setting-link{width:100%;border:0;background:transparent;display:flex;align-items:center;justify-content:space-between;text-align:left;color:var(--ink);padding:14px 0;font-size:11px;min-height:44px;border-bottom:1px solid var(--line)}
+.setting-link:last-child{border-bottom:0;padding-bottom:0}
+.setting-link svg{width:13px;height:13px;color:var(--muted)}
+.setting-link .link-label{display:flex;align-items:center;gap:9px}
+.setting-link .link-label svg{width:16px;height:16px;color:var(--accent)}
+.brand-footer{display:flex;align-items:center;gap:10px;padding:8px 4px 4px}
+.brand-footer svg{width:24px;height:24px;color:var(--accent)}
+.brand-footer strong{font-size:12px;font-weight:650}
+.brand-footer p{font-size:10px;line-height:1.7;color:var(--muted);margin:4px 0 0}
+.event{font-size:10px;color:var(--muted);line-height:1.9;margin:5px 0}
+.empty{color:var(--muted);font-size:12px;text-align:center;padding:25px}
+dialog{border:1px solid #dce7df;border-radius:25px;padding:0;width:min(360px,calc(100vw - 32px));max-height:85vh;background:#fff;color:#16352d;box-shadow:0 20px 70px #0002}
+dialog::backdrop{background:#102d2260;backdrop-filter:blur(5px)}
+.dialog-inner{padding:25px}
+.dialog-label{font-size:10px;letter-spacing:.1em;color:#086f5a;margin-bottom:13px;font-weight:700}
+dialog h2{font-size:24px;letter-spacing:-.04em;line-height:1.4;margin:0 0 15px}
+dialog p{font-size:13px;color:#5b7067;line-height:1.9}
+dialog .primary{background:#086f5a;color:white;margin-top:22px}
+.secondary{border:0;background:none;color:#5b7067;min-height:44px;width:100%;font-size:12px;margin-top:7px}
+.dialog-notice{font-size:11px;color:#086f5a;background:#e5f2eb;padding:12px;border-radius:12px;line-height:1.8}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:900px){.showcase{gap:30px;grid-template-columns:1fr 390px;padding:30px}.editorial h1{font-size:44px}.eyebrow{margin-top:35px}}
+@media(max-width:680px){body{background:#f4f6f3}.showcase{display:block;padding:0;min-height:100dvh}.editorial{display:none}.device{width:100%;height:100dvh;border:0;border-radius:0;box-shadow:none}.status-bar{display:none}.demo-banner{margin-top:12px}.home-indicator{height:14px}.page-header{padding-top:19px}.viewport{padding-left:20px;padding-right:20px}.hero h2{font-size:31px}.hero p,.pack-description{font-size:14px}.info-row,.rule-text strong,.check-body strong,.setting-link{font-size:13px}.caption,.notice p,.check-body p{font-size:12px}.primary{font-size:15px;min-height:52px}.tabbar button{font-size:11px}.header-sub{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3c0 10-2 16-10 16a6 6 0 0 1-6-6C4 5 12 7 20 3Z"/><path d="M3 22c1-6 5-10 11-13"/></symbol>
+<symbol id="i-rules" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/><circle cx="8" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-diag" viewBox="0 0 24 24"><path d="M4 3v5a5 5 0 0 0 10 0V3M3 3h3M12 3h3M9 13v3a5 5 0 0 0 10 0v-2"/><circle cx="19" cy="11" r="3"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path d="m9 3-.7 2.5-2 .9-2.3-.8-2 3.5 1.7 1.8v2.3L2 15l2 3.5 2.3-.7 2 .9L9 21h4l.8-2.3 2-.9 2.2.7 2-3.5-1.7-1.8v-2.3L20 9l-2-3.5-2.2.8-2-.9L13 3Z" transform="translate(1 0)"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+<symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+<symbol id="i-network" viewBox="0 0 24 24"><path d="M3 8a14 14 0 0 1 18 0M6 12a9 9 0 0 1 12 0M9 16a4 4 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></symbol>
+<symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 19v-4m5 4v-8m5 8V7m5 12V3" stroke-width="3"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="m3 7 9-4 9 4v11l-9 4-9-4Zm0 0 9 4 9-4M12 11v11M7 5l10 4"/></symbol>
+<symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.1M7 17.5h.1M12 6.5h5M12 17.5h5"/></symbol>
+<symbol id="i-privacy" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+</defs></svg>
+
+<div class="showcase">
+<aside class="editorial">
+  <div class="brand"><div class="brand-mark"><svg><use href="#i-leaf"/></svg></div>轻启 <span style="font-size:12px;letter-spacing:.14em;font-weight:400;margin-left:3px">QINGQI</span></div>
+  <div class="eyebrow">SWIFT + SWIFTUI · PRODUCT DESIGN 01</div>
+  <h1>让打开，<br>回归直接。</h1>
+  <p class="intro">少一点广告，多一点直接。<br>一款清楚说明能力、尊重隐私、<br>让每次操作都有据可依的 iPhone 过滤工具。</p>
+  <div class="design-tabs" aria-label="预览页面">
+    <button data-page="overview" class="active">概览</button>
+    <button data-page="rules">规则</button>
+    <button data-page="diagnostics">诊断</button>
+    <button data-page="settings">设置</button>
+  </div>
+  <div class="swatches"><span class="swatch" style="background:#086f5a"></span><span class="swatch" style="background:#16352d"></span><span class="swatch" style="background:#e5f2eb"></span><span class="swatch" style="background:#f4f6f3"></span><span>安静 · 轻量 · 可控</span></div>
+  <div class="disclaimer">这是可点击的离线设计原型，不是网络过滤 App。<br>授权、配置和自检均为演示，不会发送网络请求。<br>原生版采用 SwiftUI；此 HTML 仅用于评审界面和交互。</div>
+</aside>
+
+<div class="device" id="device" data-theme="light">
+  <div class="status-bar" aria-hidden="true"><span>9:41</span><div class="island"></div><div class="status-icons"><svg><use href="#i-signal"/></svg><svg><use href="#i-network"/></svg><div class="battery"></div></div></div>
+  <div class="demo-banner">交互演示 · 不会安装配置或拦截广告</div>
+  <header class="page-header"><div><h1 class="page-title" id="pageTitle">轻启</h1><div class="header-sub" id="pageSubtitle">让每一次打开，更轻一点。</div></div><div class="header-icon" aria-hidden="true"><svg id="headerIcon"><use href="#i-leaf"/></svg></div></header>
+  <main class="viewport" id="viewport" aria-labelledby="pageTitle"><div class="page" id="page"></div></main>
+  <nav class="tabbar" role="tablist" aria-label="主导航">
+    <button data-page="overview" role="tab" aria-selected="true" class="active"><span class="tab-icon"><svg aria-hidden="true"><use href="#i-leaf"/></svg></span>概览</button>
+    <button data-page="rules" role="tab" aria-selected="false"><span class="tab-icon"><svg aria-hidden="true"><use href="#i-rules"/></svg></span>规则</button>
+    <button data-page="diagnostics" role="tab" aria-selected="false"><span class="tab-icon"><svg aria-hidden="true"><use href="#i-diag"/></svg></span>诊断</button>
+    <button data-page="settings" role="tab" aria-selected="false"><span class="tab-icon"><svg aria-hidden="true"><use href="#i-gear"/></svg></span>设置</button>
+  </nav>
+  <div class="home-indicator" aria-hidden="true"></div>
+</div>
+</div>
+
+<dialog id="dialog" aria-labelledby="dialogTitle"><div class="dialog-inner" id="dialogContent"></div></dialog>
+<script>
+"use strict";
+const state={page:"overview",filter:"notConfigured",didCheck:false,checkEnabled:false,theme:"system",events:[]};
+const pageMeta={
+  overview:["轻启","让每一次打开，更轻一点。","leaf"],
+  rules:["规则","规则透明，使用才安心。","rules"],
+  diagnostics:["诊断","先弄清问题，再调整设置。","diag"],
+  settings:["设置","简单设置，清楚掌控。","gear"]
+};
+const rules=[
+  {id:"domain",title:"广告域名示例",key:"ads.example.com",description:"演示独立广告域名的说明方式。此保留域名不是实际广告规则，也没有接入系统过滤。"},
+  {id:"url",title:"URL 组成项示例",key:"media.example.net/ad/",description:"仅展示规则元数据。真实匹配需要遵守苹果 URL 解析与数据集规范，不能当作任意字符串前缀匹配。"},
+  {id:"exception",title:"误拦截修复示例",key:"account.example.org",description:"展示发布级规则修复，不是按 App 放行，也不代表个人白名单已经实现。"}
+];
+const icon=(name)=>`<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const row=(label,value,sub="")=>`<div class="info-row"><span class="label">${label}</span><span class="value">${value}${sub?`<span class="sub">${sub}</span>`:""}</span></div>`;
+const notice=(title,body)=>`<div class="notice">${icon("info")}<div><h3>${title}</h3><p>${body}</p></div></div>`;
+const link=(text,action,symbol="info")=>`<button class="setting-link" data-info="${action}"><span class="link-label">${icon(symbol)}${text}</span>${icon("chevron")}</button>`;
+function overview(){
+ const enabled=state.filter==="enabled", waiting=state.filter==="waiting";
+ const title=enabled?"配置已启用":waiting?"等待系统确认":state.filter==="disabled"?"过滤已关闭":"少一点广告，<br>多一点直接。";
+ const description=enabled?"这是演示中的启用状态。<br>设备上没有任何请求被此原型过滤。":waiting?"正式版需完成真实系统授权，<br>返回后再读取配置状态。":state.filter==="disabled"?"已关闭演示状态。<br>设备网络从未被修改。":"从一个清楚、可控的过滤配置开始。<br>不替你点击，只减少可识别的广告请求。";
+ const button=enabled?"关闭演示过滤":waiting?"模拟授权完成":state.filter==="disabled"?"重新体验设置":"体验设置流程";
+ return `<section class="card hero"><div class="hero-top"><div class="hero-icon">${icon(enabled?"check":"leaf")}</div><span class="chip ${enabled?"enabled":""}"><i></i>${enabled?"演示已启用":waiting?"演示待确认":"演示状态"}</span></div><h2>${title}</h2><p>${description}</p><button class="primary" data-action="main">${button}${icon("arrow")}</button></section>
+ <section class="card"><h2 class="section-title">当前配置<span class="small">透明 · 可控</span></h2>${row("过滤方式","原生 URL 过滤","计划方案，尚未接入")}${row("规则版本","示例 v0.1")}${row("最近自检",state.didCheck?"仅有演示结果":"尚未运行")}</section>
+ ${notice("减少广告，不承诺万能","正式版只覆盖系统支持的请求。内置、缓存广告和倒计时可能仍然存在。")}
+ <button class="text-action" data-page="diagnostics">${icon("diag")}检查配置与网络${icon("arrow")}</button>`;
+}
+function ruleCards(query=""){
+ const visible=rules.filter(r=>(r.title+" "+r.key).toLowerCase().includes(query.toLowerCase()));
+ return visible.length?visible.map(r=>`<button class="rule-card" data-rule="${r.id}"><span class="rule-number">${String(rules.indexOf(r)+1).padStart(2,"0")}</span><span class="rule-text"><strong>${r.title}</strong><code>${r.key}</code></span>${icon("chevron")}</button>`).join(""):`<div class="empty">没有匹配的示例规则</div>`;
+}
+function rulesPage(){
+ return `<section class="card"><div class="pack-title"><span class="pack-icon">${icon("rules")}</span><div><h2>基础广告规则</h2><span class="caption">固定配置档 · 稳妥优先</span></div></div><p class="pack-description">优先减少误拦截，<br>而不是盲目增加规则数量。</p><div class="mini-line"><span class="mini-tag">3 条说明示例</span><span class="mini-tag">示例 v0.1</span></div></section>
+ <label class="search-wrap">${icon("search")}<span class="sr-only">搜索示例规则</span><input class="search" id="ruleSearch" placeholder="搜索示例规则或域名" autocomplete="off" spellcheck="false"></label>
+ <h2 class="small-heading">规则说明</h2><div class="rule-list" id="ruleList">${ruleCards()}</div>
+ ${notice("暂不提供按 App 放行","规则说明不等于系统能识别请求来自哪个 App。正式版先使用经过验证的固定配置档。")}`;
+}
+function checkRow(symbol,title,description,label,success=false){
+ return `<div class="check-row"><span class="check-icon ${success?"success":""}">${icon(symbol)}</span><div class="check-body"><strong>${title}</strong><p>${description}</p></div><span class="check-label ${success?"success":""}">${label}</span></div>`;
+}
+function diagnostics(){
+ return `<section class="card hero diag-hero"><div class="hero-top"><div class="hero-icon">${icon("diag")}</div><span class="chip">仅检查受控资源</span></div><h2>给配置做个自检</h2><p>不扫描 App，也不读取浏览记录。<br>这里只演示检查流程，不发送真实请求。</p><button class="primary" data-action="check">运行演示自检${icon("arrow")}</button></section>
+ <section class="card"><h2 class="section-title">检查项目<span class="small">${state.didCheck?"以下均为演示":"等待主动检查"}</span></h2>
+ ${checkRow("gear","配置状态",state.didCheck?(state.checkEnabled?"模拟配置已启用":"模拟配置未启用"):"尚未读取系统配置",state.didCheck?"示例":"未检查")}
+ ${checkRow("box","规则数据","本地说明示例，不代表生效",state.didCheck?"示例":"未检查")}
+ ${checkRow("network","受控资源","未发送真实网络请求","未执行")}
+ ${checkRow("server","PIR 服务","尚未接入生产服务","未接入")}</section>
+ ${notice("失败，不一定是成功拦截","断网、服务异常和过滤阻止必须分别判断。证据不足时，正式版会显示“无法判断”。")}
+ ${state.events.length?`<section class="card"><h2 class="section-title">本次演示事件</h2>${state.events.slice(0,4).map(e=>`<p class="event">${e}</p>`).join("")}</section>`:""}`;
+}
+function settings(){
+ return `<section class="card"><h2 class="section-title"><span style="display:flex;align-items:center;gap:8px">${icon("sun")}外观</span></h2><div class="segmented" aria-label="外观">${[["system","跟随系统"],["light","浅色"],["dark","深色"]].map(([key,name])=>`<button data-theme-choice="${key}" class="${state.theme===key?"active":""}" aria-pressed="${state.theme===key}">${name}</button>`).join("")}</div></section>
+ <section class="card"><h2 class="section-title">隐私与数据</h2>${row("浏览记录","原型不读取")}${row("诊断上传","原型不联网")}<button class="setting-link" data-action="clear"><span class="link-label">${icon("privacy")}清除本次演示事件</span>${icon("chevron")}</button></section>
+ <section class="card"><h2 class="section-title">帮助</h2>${link("覆盖范围与限制","coverage")}${link("服务端与隐私","server","server")}${link("功能异常时怎么办","recovery","diag")}</section>
+ <div class="brand-footer">${icon("leaf")}<div><strong>轻启 · 设计原型 V1</strong><p>Swift + SwiftUI<br>界面演示，不包含真实广告过滤能力。</p></div></div>`;
+}
+function setTheme(){
+ const dark=state.theme==="dark"||(state.theme==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+ document.getElementById("device").dataset.theme=dark?"dark":"light";
+}
+function render(resetScroll=false){
+ const meta=pageMeta[state.page];
+ document.getElementById("pageTitle").textContent=meta[0];
+ document.getElementById("pageSubtitle").textContent=meta[1];
+ document.getElementById("headerIcon").innerHTML=`<use href="#i-${meta[2]}"/>`;
+ document.getElementById("page").innerHTML=({overview,rules:rulesPage,diagnostics,settings})[state.page]();
+ document.querySelectorAll("[data-page]").forEach(b=>{
+   const active=b.dataset.page===state.page;b.classList.toggle("active",active);
+   if(b.getAttribute("role")==="tab")b.setAttribute("aria-selected",String(active));
+ });
+ if(resetScroll)document.getElementById("viewport").scrollTop=0;
+ setTheme();
+}
+function modal(title,body,action="close",primary="知道了"){
+ const d=document.getElementById("dialog");
+ document.getElementById("dialogContent").innerHTML=`<div class="dialog-label">QINGQI · DESIGN PROTOTYPE</div><h2 id="dialogTitle">${title}</h2>${body}<button class="primary" data-action="${action}">${primary}${action!=="close"?icon("arrow"):""}</button>${action!=="close"?`<button class="secondary" data-action="close">取消</button>`:""}`;
+ d.showModal();
+}
+const help={
+ coverage:["覆盖范围","计划采用 iOS 26 官方 URL Filter。WebKit / URLSession 以外且未参与的请求不保证覆盖；缓存广告与倒计时可能保留。"],
+ server:["不是零服务器方案","正式架构需要规则分发与 PIR 隐私查询服务，不转发完整业务流量。成本和生产隐私配置必须先做技术验证。"],
+ recovery:["先恢复，再反馈","正式版会提供清楚、可验证的关闭入口，再由用户主动提交脱敏反馈。此原型没有修改任何系统设置。"]
+};
+document.addEventListener("click",event=>{
+ const button=event.target.closest("button");if(!button)return;
+ if(button.dataset.page){state.page=button.dataset.page;render(true);return;}
+ if(button.dataset.themeChoice){state.theme=button.dataset.themeChoice;render();return;}
+ if(button.dataset.rule){
+   const r=rules.find(x=>x.id===button.dataset.rule);
+   modal(r.title,`<p><code>${r.key}</code></p><p>${r.description}</p><div class="dialog-notice">来源：设计示例<br>验证：未测试，不可发布为生产规则</div>`);return;
+ }
+ if(button.dataset.info){const [title,text]=help[button.dataset.info];modal(title,`<p>${text}</p>`);return;}
+ switch(button.dataset.action){
+   case "main":
+     if(state.filter==="enabled"){state.filter="disabled";state.events.unshift("模拟配置已关闭");render();}
+     else if(state.filter==="waiting"){state.filter="enabled";state.events.unshift("模拟配置已启用");render();}
+     else modal("先了解，再开启",`<div class="dialog-notice">这是流程演示，不会弹出真实系统授权，也不会安装过滤配置。</div><p>正式版不自动点击其他 App，不转发完整业务流量，但需要 PIR 服务，也不保证所有广告消失。</p><p>正式授权必须交给 iOS。返回后重新读取配置，不能只因为点了按钮就显示成功。</p>`,"prepare","模拟进入等待确认");
+     break;
+   case "prepare":
+     document.getElementById("dialog").close();state.filter="waiting";state.events.unshift("模拟等待系统确认");render();break;
+   case "check":
+     state.didCheck=true;state.checkEnabled=state.filter==="enabled";state.events.unshift("运行演示自检，未发送网络请求");render();break;
+   case "clear":
+     state.events=[];state.didCheck=false;render();modal("已清除演示事件","<p>只清理了当前原型内存中的事件，没有修改任何系统配置。</p>");break;
+   case "close":document.getElementById("dialog").close();break;
+ }
+});
+document.addEventListener("input",event=>{
+ if(event.target.id==="ruleSearch")document.getElementById("ruleList").innerHTML=ruleCards(event.target.value);
+});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",setTheme);
+render();
+</script>
+</body>
+</html>

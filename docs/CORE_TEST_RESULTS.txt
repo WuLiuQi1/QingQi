@@ -1,0 +1,70 @@
+Building for debugging...
+[0/13] Write sources
+[2/13] Write swift-version--1BA0962812E73E12.txt
+[4/15] Emitting module QingQiCore
+[5/15] Compiling QingQiCore DomainRules.swift
+[6/16] Wrapping AST for QingQiCore for debugging
+[8/18] Emitting module QingQiCoreTests
+[9/18] Compiling QingQiCoreTests DomainRulesTests.swift
+[10/19] /mnt/data/QingQi_Design_V1/Core/.build/x86_64-unknown-linux-gnu/debug/QingQiCorePackageDiscoveredTests.derived/all-discovered-tests.swift
+[11/19] Write sources
+[12/19] Wrapping AST for QingQiCoreTests for debugging
+[14/22] Compiling QingQiCorePackageDiscoveredTests QingQiCoreTests.swift
+[15/22] Emitting module QingQiCorePackageDiscoveredTests
+[16/22] Compiling QingQiCorePackageDiscoveredTests all-discovered-tests.swift
+[17/23] /mnt/data/QingQi_Design_V1/Core/.build/x86_64-unknown-linux-gnu/debug/QingQiCorePackageTests.derived/runner.swift
+[18/23] Write sources
+[19/23] Wrapping AST for QingQiCorePackageDiscoveredTests for debugging
+[21/25] Emitting module QingQiCorePackageTests
+[22/25] Compiling QingQiCorePackageTests runner.swift
+[23/26] Wrapping AST for QingQiCorePackageTests for debugging
+[24/26] Write Objects.LinkFileList
+[25/26] Linking QingQiCorePackageTests.xctest
+Build complete! (12.48s)
+Test Suite 'All tests' started at 2026-09-26 14:38:31.482
+Test Suite 'debug.xctest' started at 2026-09-26 14:38:31.498
+Test Suite 'DomainRulesTests' started at 2026-09-26 14:38:31.498
+Test Case 'DomainRulesTests.testAcceptsPunycodeASCIISyntax' started at 2026-09-26 14:38:31.498
+Test Case 'DomainRulesTests.testAcceptsPunycodeASCIISyntax' passed (0.007 seconds)
+Test Case 'DomainRulesTests.testChildExceptionSuppressesParentBlock' started at 2026-09-26 14:38:31.505
+Test Case 'DomainRulesTests.testChildExceptionSuppressesParentBlock' passed (0.003 seconds)
+Test Case 'DomainRulesTests.testDeduplicatesAndSorts' started at 2026-09-26 14:38:31.508
+Test Case 'DomainRulesTests.testDeduplicatesAndSorts' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testDotBoundarySuffixMatching' started at 2026-09-26 14:38:31.509
+Test Case 'DomainRulesTests.testDotBoundarySuffixMatching' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testEmptyCompilation' started at 2026-09-26 14:38:31.509
+Test Case 'DomainRulesTests.testEmptyCompilation' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testHelperMatchesEffectiveSetOnly' started at 2026-09-26 14:38:31.509
+Test Case 'DomainRulesTests.testHelperMatchesEffectiveSetOnly' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testInvalidInputFailsInsteadOfSilentlyDropping' started at 2026-09-26 14:38:31.509
+Test Case 'DomainRulesTests.testInvalidInputFailsInsteadOfSilentlyDropping' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testNormalizesCaseWhitespaceAndTrailingDot' started at 2026-09-26 14:38:31.510
+Test Case 'DomainRulesTests.testNormalizesCaseWhitespaceAndTrailingDot' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testParentExceptionSuppressesChildBlock' started at 2026-09-26 14:38:31.510
+Test Case 'DomainRulesTests.testParentExceptionSuppressesChildBlock' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testRejectsIPAddresses' started at 2026-09-26 14:38:31.510
+Test Case 'DomainRulesTests.testRejectsIPAddresses' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testRejectsLongDomains' started at 2026-09-26 14:38:31.511
+Test Case 'DomainRulesTests.testRejectsLongDomains' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testRejectsLongLabels' started at 2026-09-26 14:38:31.511
+Test Case 'DomainRulesTests.testRejectsLongLabels' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testRejectsMalformedNames' started at 2026-09-26 14:38:31.511
+Test Case 'DomainRulesTests.testRejectsMalformedNames' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testRejectsNonASCII' started at 2026-09-26 14:38:31.511
+Test Case 'DomainRulesTests.testRejectsNonASCII' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testRejectsURLsAndWildcardSyntax' started at 2026-09-26 14:38:31.511
+Test Case 'DomainRulesTests.testRejectsURLsAndWildcardSyntax' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testSameDomainExceptionSuppressesBlock' started at 2026-09-26 14:38:31.512
+Test Case 'DomainRulesTests.testSameDomainExceptionSuppressesBlock' passed (0.0 seconds)
+Test Case 'DomainRulesTests.testUnrelatedExceptionDoesNotSuppress' started at 2026-09-26 14:38:31.512
+Test Case 'DomainRulesTests.testUnrelatedExceptionDoesNotSuppress' passed (0.0 seconds)
+Test Suite 'DomainRulesTests' passed at 2026-09-26 14:38:31.512
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.014 (0.014) seconds
+Test Suite 'debug.xctest' passed at 2026-09-26 14:38:31.512
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.014 (0.014) seconds
+Test Suite 'All tests' passed at 2026-09-26 14:38:31.512
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.014 (0.014) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.2.1 (c9d57c83568b06d)
+↳ Target Platform: x86_64-unknown-linux-gnu
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

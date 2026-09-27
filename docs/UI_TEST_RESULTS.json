@@ -1,0 +1,14 @@
+{
+  "checks_passed": [
+    "Persistent demo disclosure",
+    "Demo setup -> waiting -> enabled -> disabled",
+    "Rule search, details and empty state",
+    "Diagnostic output remains explicitly simulated",
+    "Appearance and event clearing",
+    "375px responsive layout and four reachable tabs",
+    "Keyboard focus path exercised"
+  ],
+  "javascript_errors": [],
+  "external_http_requests": [],
+  "scope": "Browser prototype only; no iOS filtering or Apple SDK runtime tests"
+}

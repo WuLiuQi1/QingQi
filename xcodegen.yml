@@ -1,0 +1,25 @@
+name: QingQi
+options:
+  deploymentTarget:
+    iOS: "26.0"
+packages:
+  QingQiCore:
+    path: Core
+targets:
+  QingQi:
+    type: application
+    platform: iOS
+    sources:
+      - path: QingQiApp
+    dependencies:
+      - package: QingQiCore
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi
+      SWIFT_VERSION: 6.0
+      GENERATE_INFOPLIST_FILE: YES
+      MARKETING_VERSION: 0.1.0
+      CURRENT_PROJECT_VERSION: 1
+      TARGETED_DEVICE_FAMILY: "1"
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      INFOPLIST_KEY_CFBundleDisplayName: QingQi
+      INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
