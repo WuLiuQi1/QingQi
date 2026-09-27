@@ -78,11 +78,21 @@ struct DiagnosticsView: View {
 
 struct SettingsView: View {
     @EnvironmentObject private var model: QingQiAppModel
+    @AppStorage("appearance") private var appearance = 0
     var body: some View {
         NavigationStack {
             QingQiPage {
                 Text("简单设置，清楚掌控。").foregroundStyle(QingQiColors.secondary)
-                QingQiCard { Text("外观").font(.headline); Text("跟随系统（工程骨架）") }
+                QingQiCard {
+                    Text("外观").font(.headline)
+                    Picker("外观", selection: $appearance) {
+                        Text("跟随系统").tag(0)
+                        Text("浅色").tag(1)
+                        Text("深色").tag(2)
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityLabel("外观模式")
+                }
                 QingQiCard {
                     Text("隐私与数据").font(.headline)
                     Text("浏览记录：不读取")
