@@ -7,8 +7,8 @@ struct OverviewView: View {
             QingQiPage {
                 Text("让每一次打开，更轻一点。").foregroundStyle(QingQiColors.secondary)
                 QingQiCard {
-                    Label("过滤能力尚未接入", systemImage: "leaf").font(.title2.bold())
-                    Text("当前仅提供 UI 和纯数据层演示，不会安装系统配置或拦截广告。").foregroundStyle(QingQiColors.secondary)
+                    Label("原生 URL Filter", systemImage: "leaf").font(.title2.bold())
+                    Text("可通过设置配置 Apple 系统过滤；是否运行取决于 entitlement、Bloom prefilter、PIR 服务和系统授权。").foregroundStyle(QingQiColors.secondary)
                     Text(model.message).font(.footnote).foregroundStyle(QingQiColors.secondary)
                     QingQiPrimaryButton("重新读取系统状态") { Task { await model.refresh() } }
                 }
@@ -79,6 +79,9 @@ struct DiagnosticsView: View {
 struct SettingsView: View {
     @EnvironmentObject private var model: QingQiAppModel
     @AppStorage("appearance") private var appearance = 0
+    @AppStorage("qingqi.pirServerURL") private var pirServerURL = ""
+    @AppStorage("qingqi.pirAuthenticationToken") private var pirAuthenticationToken = ""
+    @AppStorage("qingqi.shouldFailClosed") private var shouldFailClosed = true
     var body: some View {
         NavigationStack {
             QingQiPage {
@@ -92,6 +95,23 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.segmented)
                     .accessibilityLabel("外观模式")
+                }
+                QingQiCard {
+                    Text("真实 URL Filter").font(.headline)
+                    TextField("PIR 服务地址，例如 http://Mac局域网地址:8080", text: $pirServerURL)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .keyboardType(.URL)
+                    SecureField("PIR 认证 token", text: $pirAuthenticationToken)
+                    Toggle("PIR 失败时阻止请求", isOn: $shouldFailClosed)
+                    Text("需要 Apple URL Filter entitlement、官方 Bloom prefilter 和可访问的 PIR 服务；未配置时不会显示成功。")
+                        .font(.footnote).foregroundStyle(QingQiColors.secondary)
+                    QingQiPrimaryButton("保存并请求系统授权") { Task { await model.requestEnable() } }
+                        .disabled(model.isBusy)
+                    Button("关闭系统过滤") { Task { await model.disable() } }
+                        .frame(minHeight: 44)
+                    Button("移除系统过滤配置", role: .destructive) { Task { await model.removeConfiguration() } }
+                        .frame(minHeight: 44)
                 }
                 QingQiCard {
                     Text("隐私与数据").font(.headline)

@@ -37,6 +37,19 @@ final class QingQiAppModel: ObservableObject {
         catch { message = error.localizedDescription; operation = .failed(error.localizedDescription) }
     }
 
+    func removeConfiguration() async {
+        operation = .loading
+        do {
+            snapshot = try await engine.removeConfiguration()
+            message = snapshot.statusEvidence
+            await record("移除系统过滤配置")
+            operation = .idle
+        } catch {
+            message = error.localizedDescription
+            operation = .failed(error.localizedDescription)
+        }
+    }
+
     func record(_ name: String) async {
         await eventStore.append(ConfigurationEvent(name: name)); events = await eventStore.events()
     }

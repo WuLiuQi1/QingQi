@@ -2,16 +2,34 @@ import SwiftUI
 
 @main
 struct QingQiApp: App {
-    var body: some Scene { WindowGroup { QingQiRootView() } }
+    @StateObject private var model: QingQiAppModel
+
+    init() {
+        #if canImport(NetworkExtension)
+        if #available(iOS 26.0, *) {
+            _model = StateObject(wrappedValue: QingQiAppModel(engine: NativeURLFilterEngine()))
+        } else {
+            _model = StateObject(wrappedValue: QingQiAppModel())
+        }
+        #else
+        _model = StateObject(wrappedValue: QingQiAppModel())
+        #endif
+    }
+
+    var body: some Scene { WindowGroup { QingQiRootView(model: model) } }
 }
 
 struct QingQiRootView: View {
-    @StateObject private var model = QingQiAppModel()
+    @StateObject private var model: QingQiAppModel
     @AppStorage("appearance") private var appearance = 0
     @State private var tab = 0
+    init(model: QingQiAppModel) {
+        _model = StateObject(wrappedValue: model)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            Text("交互演示 · 真实 URL Filter 尚未接入").font(.caption).foregroundStyle(QingQiColors.accent).frame(maxWidth: .infinity).padding(9).background(QingQiColors.soft)
+            Text("原生 URL Filter · 需要系统授权与 PIR 配置").font(.caption).foregroundStyle(QingQiColors.accent).frame(maxWidth: .infinity).padding(9).background(QingQiColors.soft)
             TabView(selection: $tab) {
                 OverviewView().environmentObject(model).tabItem { Label("概览", systemImage: "leaf") }.tag(0)
                 RulesView().tabItem { Label("规则", systemImage: "line.3.horizontal.decrease.circle") }.tag(1)

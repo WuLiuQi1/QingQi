@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'QingQiApp/**'
+      - 'QingQiURLFilterExtension/**'
       - 'Core/**'
       - 'xcodegen.yml'
       - '.github/workflows/ios-validation.yml'
