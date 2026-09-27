@@ -1,12 +1,20 @@
 import SwiftUI
 
 public enum QingQiColors {
-    public static let background = Color(red: 0.957, green: 0.965, blue: 0.953)
-    public static let surface = Color.white
-    public static let ink = Color(red: 0.086, green: 0.208, blue: 0.176)
-    public static let secondary = Color(red: 0.357, green: 0.439, blue: 0.404)
-    public static let accent = Color(red: 0.031, green: 0.435, blue: 0.353)
-    public static let soft = Color(red: 0.898, green: 0.949, blue: 0.922)
+    public static let background = Color(uiColor: .systemGroupedBackground)
+    public static let surface = Color(uiColor: .secondarySystemGroupedBackground)
+    public static let ink = Color(uiColor: .label)
+    public static let secondary = Color(uiColor: .secondaryLabel)
+    public static let accent = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(red: 0.51, green: 0.85, blue: 0.71, alpha: 1)
+            : UIColor(red: 0.03, green: 0.44, blue: 0.35, alpha: 1)
+    })
+    public static let soft = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(red: 0.12, green: 0.24, blue: 0.19, alpha: 1)
+            : UIColor(red: 0.90, green: 0.95, blue: 0.92, alpha: 1)
+    })
 }
 
 public struct QingQiCard<Content: View>: View {
