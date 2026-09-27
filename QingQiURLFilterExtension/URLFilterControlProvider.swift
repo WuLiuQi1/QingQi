@@ -6,9 +6,8 @@ import NetworkExtension
 /// The bundled Bloom artifact is intentionally required. A missing or invalid
 /// artifact throws instead of returning a fabricated success result.
 @available(iOS 26.0, *)
-@MainActor
 final class URLFilterControlProvider: NSObject, NEURLFilterControlProvider {
-    override init() {
+    @MainActor override init() {
         super.init()
     }
 
