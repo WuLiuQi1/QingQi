@@ -1,0 +1,10 @@
+case,device,ios,xcode,sdk,network,other_vpn_dns,request_type,url_class,expected,result,evidence,notes
+initial-config,,,,,,,,,,, ,
+approval-readback,,,,,,,,,,, ,
+controlled-allow,,,,,,,,,,, ,
+controlled-block,,,,,,,,,,, ,
+disable-readback,,,,,,,,,,, ,
+remove-readback,,,,,,,,,,, ,
+pir-timeout,,,,,,,,,,, ,
+dataset-mismatch,,,,,,,,,,, ,
+custom-network-stack,,,,,,,,,,, ,

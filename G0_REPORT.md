@@ -33,6 +33,8 @@
 
 在 Mac 上从 Apple SimpleURLFilter 样例建立 `spikes/NativeURLFilter/`，使用自有签名跑通授权、关闭、状态回读和受控 URL，然后记录实测数据与失败日志。
 
+执行清单与数据表见 `spikes/NativeURLFilter/G0_RUNBOOK.md` 和 `spikes/NativeURLFilter/G0_DATA_CAPTURE.csv`。
+
 ## 本次实际命令
 
 - `Get-Location`、逐项 `Test-Path`：资料文件与 `Core/`、`UI/` 均存在。
