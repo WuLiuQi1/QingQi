@@ -1,10 +1,24 @@
-# 02 · 架构、规则与成本
+# 02 · 架构、规则与成本（V2）
+
+## V2 主线
+
+当前产品优先交付两个独立的系统扩展：
+
+```text
+QingQi SwiftUI 主 App
+  ├── Message Filter Extension（IdentityLookup）
+  │     └── 本地短信分类；仅处理未知发送者 SMS/MMS
+  └── Call Directory Extension（CallKit）
+        └── 批量号码识别 / 阻止；由系统加载目录
+```
+
+短信扩展不能自行联网，来电目录也不能在每通电话到达时实时查询服务端。广告 URL Filter 保留为后续研究，不属于 V2 默认承诺。
 
 ## 1. 技术决策
 
 采用 Swift + SwiftUI。架构采用轻量 MVVM / 单向状态更新，View 不直接操作系统过滤配置。
 
-生产能力基线：iOS 26+ 官方 URL Filter；在有 Apple 开发者签名的普通非受监管真机上完成 G0 验证后，才进入正式集成。[S2][S4]
+生产能力基线：IdentityLookup 短信过滤扩展与 CallKit Call Directory 扩展；必须在有 Apple 开发者签名的真机上完成系统设置启用、分类/识别/阻止和 reload 回读验证后，才可称为真实能力。URL Filter 暂缓，不作为当前版本基线。
 
 不把以下方案作为首版主线：
 - 用 NEPacketTunnelProvider 做纯本地拦截、重注入或全 DNS 拦截：苹果列为不支持用途。[S1]
@@ -18,21 +32,18 @@
 
 ```text
 SwiftUI 主 App
-  ├── 状态与授权流程
-  ├── 规则元数据与版本展示
+  ├── 状态与系统设置引导
+  ├── 短信 / 来电规则元数据
   ├── 用户主动诊断
   └── 本地设置 / 反馈草稿
           │ FilterEngine 协议
-          ▼
-NativeURLFilterEngine（G0 通过后实现）
-  ├── NEURLFilterManager：配置、保存、状态回读
-  └── URL Filter 控制扩展：提供有效 Bloom 数据
-          │
-          ▼
-iOS 执行过滤
-  ├── 本机 Bloom：确定未匹配 → 允许
-  └── 潜在匹配 → PIR 隐私查询 → 系统决定允许 / 阻止
+          ├── MessageFilterEngine
+          │     └── IdentityLookup 分类映射
+          └── CallDirectoryEngine
+                └── 号码规范化、排序、批量 reload
 ```
+
+原有 URL Filter、Bloom、PIR 结构以下仍作为延期研究记录，不代表本版本已经接入生产。
 
 Bloom 不是最终裁决数据库。它存在假阳性，不能把“Bloom 命中”当作“拦截成功”。PIR 为官方机制的一部分。[S3][S4]
 

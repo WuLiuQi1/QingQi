@@ -1,14 +1,16 @@
-# 03 · 交给 Codex 的开发任务
+# 03 · 交给 Codex 的开发任务（V2）
 
 你负责在本设计基础上开发原生 iOS App「轻启」。使用 Swift + SwiftUI，不改为 WebView、Flutter 或 React Native。
 
 ## 必须先读
 README.md → 01_Product_and_UI.md → 02_Architecture_and_Rules.md → 04_Test_Plan_and_Risks.md → SOURCES.md。
 
-本包是启动材料，不是已完工的网络过滤器。浏览器与 SwiftUI 演示行为均为 Mock。不要因演示能够点亮开关就认为系统过滤已实现。
+本包是启动材料，不是已完工的短信或来电过滤器。SwiftUI 演示行为均为 Mock。不要因演示能够点亮开关就认为系统扩展已启用。广告拦截暂缓研究。
 
 ## 永久约束
 - 只用公开 API 和明确支持的部署方式。
+- 短信使用 IdentityLookup Message Filter Extension；来电使用 CallKit Call Directory Extension。
+- 不把短信过滤扩展扩展为 iMessage、通讯录联系人或任意消息读取；不把来电目录扩展描述为实时联网查询。
 - 不把 NEPacketTunnelProvider 当作纯本地内容过滤主线。
 - 不假定普通 iPhone 可以安装任意 DNS Proxy / Content Filter。
 - 不依赖来源 App 标识、全设备访问日志、自动点击或 TLS MITM。
@@ -19,7 +21,18 @@ README.md → 01_Product_and_UI.md → 02_Architecture_and_Rules.md → 04_Test_
 - 不把 `fatalError("TODO")` 或空成功回调当作已完成实现。
 - Release 必须排除演示引擎；在真实状态不可用时显示不可用。
 
-## G0：先验证核心可行性（阻塞后续集成）
+## G0：短信与来电扩展准入
+
+任务：
+1. 在真实 Xcode 工程中加入 Message Filter Extension 与 Call Directory Extension target，并记录最低系统版本、签名和 capability。
+2. 用未知号码发送受控 SMS/MMS，验证垃圾、营销、诈骗、交易和其他分类映射；确认 iMessage 与通讯录联系人不在范围内。
+3. 加载已排序的来电识别/阻止号码目录，验证系统设置启用、关闭、reload、空目录和错误回读。
+4. 验证重复号码、非法号码、地区格式和大目录的规范化、排序及内存边界。
+5. 记录扩展不能直接联网、来电不能实时查询的限制，并在 UI 中显示可恢复状态。
+
+交付：`SMS_CALL_G0_REPORT.md`、`SMS_CALL_CAPABILITY_MATRIX.md`、脱敏日志和明确的通过/阻塞结论。没有 Mac、真机或签名时必须记录阻塞，不得把 Mock 结果当成通过。
+
+## G0-URLFilter：暂缓研究
 
 建立单独的 `spikes/NativeURLFilter/`。以苹果官方 SimpleURLFilter 与 PIR 样例为参考，并遵守样例许可。使用开发者自己的账号与签名，不伪造 entitlement。
 
@@ -57,7 +70,9 @@ G0 无法执行（例如没有 Mac、真机、签名、服务器）时，明确�
 
 G1 可与 G0 并行，但不得对外发布成真正的过滤产品。
 
-## G2：规则流水线
+## G2：短信与号码规则流水线
+
+规则模型至少包含：短信类别（junk / promotion / fraud / transaction / other）、规则来源、更新时间、置信度和人工复核状态；来电规则使用规范化的 E.164 号码及识别/阻止动作。Bloom/PIR 数据集属于延期的 URL Filter 研究，不纳入本阶段验收。
 
 基于独立 Swift Package 建立规范化、来源与授权登记、冲突检查和审计输出。当前 Core 只支持 ASCII 域名；生产 IDN 处理需选择可信实现并增加测试，不要简单 lowercased 后宣称支持所有 Unicode 域名。
 
@@ -69,7 +84,9 @@ G1 可与 G0 并行，但不得对外发布成真正的过滤产品。
 - 规则许可清单与来源 commit。
 - 有效/过期/错误/回滚用例。
 
-## G3：接入真实过滤
+## G3：接入短信与来电系统扩展
+
+在 G0 通过后，接入 IdentityLookup 与 Call Directory 的真实 target，并将系统启用状态、扩展错误、目录 reload 结果映射到 UI。Release 不得用 Mock 成功状态代替真实状态。广告 URL Filter 继续保持延期。
 
 仅在 G0 通过后建立生产 URL Filter extension 和正式引擎。
 完成授权状态回读、版本同步、错误处理、关闭/移除、受控诊断。

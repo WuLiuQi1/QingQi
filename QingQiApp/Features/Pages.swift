@@ -2,22 +2,40 @@ import SwiftUI
 
 struct OverviewView: View {
     @EnvironmentObject private var model: QingQiAppModel
+
     var body: some View {
         NavigationStack {
             QingQiPage {
-                Text("让每一次打开，更轻一点。").foregroundStyle(QingQiColors.secondary)
+                Text("先把骚扰短信和来电，安静地挡在外面。")
+                    .foregroundStyle(QingQiColors.secondary)
                 QingQiCard {
-                    Label("原生 URL Filter", systemImage: "leaf").font(.title2.bold())
-                    Text("可通过设置配置 Apple 系统过滤；是否运行取决于 entitlement、Bloom prefilter、PIR 服务和系统授权。").foregroundStyle(QingQiColors.secondary)
-                    Text(model.message).font(.footnote).foregroundStyle(QingQiColors.secondary)
+                    Label("短信过滤", systemImage: "message.badge.filled.fill")
+                        .font(.title2.bold())
+                    Text("面向未知发送者的 SMS / MMS。正式版将由 iOS Messages 调用短信过滤扩展。")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Text(model.message)
+                        .font(.footnote)
+                        .foregroundStyle(QingQiColors.secondary)
                     QingQiPrimaryButton("重新读取系统状态") { Task { await model.refresh() } }
                 }
                 QingQiCard {
-                    Text("当前配置").font(.headline)
-                    Text("系统状态：\(String(describing: model.snapshot.state))")
-                    Text("规则版本：\(model.snapshot.appliedRuleVersion ?? "无")")
+                    Label("来电过滤", systemImage: "phone.badge.waveform.fill")
+                        .font(.title2.bold())
+                    Text("正式版将通过 Call Directory 提供号码识别与拦截。")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Text("当前状态：准备接入系统扩展")
+                        .font(.footnote)
+                        .foregroundStyle(QingQiColors.secondary)
                 }
-                Text("真实版本需在 iOS 26+、签名 target 和普通真机上完成 G0 验证。").font(.footnote).foregroundStyle(QingQiColors.secondary)
+                QingQiCard {
+                    Label("广告拦截", systemImage: "shield.lefthalf.filled")
+                        .font(.headline)
+                    Text("暂缓。保留 URL Filter 技术验证记录，不作为当前版本承诺。")
+                        .foregroundStyle(QingQiColors.secondary)
+                }
+                Text("短信和来电能力也必须经过系统设置启用与真机验证。")
+                    .font(.footnote)
+                    .foregroundStyle(QingQiColors.secondary)
             }
             .navigationTitle("轻启")
         }
@@ -28,17 +46,37 @@ struct RulesView: View {
     var body: some View {
         NavigationStack {
             QingQiPage {
-                Text("规则透明，使用才安心。").foregroundStyle(QingQiColors.secondary)
+                Text("规则透明，使用才安心。")
+                    .foregroundStyle(QingQiColors.secondary)
                 QingQiCard {
-                    Text("基础广告规则").font(.title2.bold())
-                    Text("固定配置档的元数据演示，未接入真实 Bloom/PIR 数据。").foregroundStyle(QingQiColors.secondary)
+                    Text("短信规则")
+                        .font(.title2.bold())
+                    Text("垃圾、营销、诈骗等分类由短信过滤扩展返回给 Messages。")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Text("当前：规则编辑与系统扩展尚未接入")
+                        .font(.footnote)
+                        .foregroundStyle(QingQiColors.secondary)
                 }
-                ForEach(["ads.example.com", "media.example.net/ad/", "account.example.org"], id: \.self) { item in
+                ForEach(["营销短信 · promotion", "诈骗短信 · fraud", "骚扰短信 · junk"], id: \.self) { item in
                     QingQiCard {
-                        Text("示例规则").font(.headline)
-                        Text(item).font(.body.monospaced())
-                        Text("未测试，不可发布").font(.footnote).foregroundStyle(QingQiColors.secondary)
+                        Text(item).font(.headline)
+                        Text("规划中 · 需要数据源、误报复核和系统扩展")
+                            .foregroundStyle(QingQiColors.secondary)
                     }
+                }
+                QingQiCard {
+                    Text("来电规则")
+                        .font(.headline)
+                    Text("号码识别与拦截目录必须按号码升序批量提供给 Call Directory。")
+                    Text("规划中 · 未接入系统扩展")
+                        .font(.footnote)
+                        .foregroundStyle(QingQiColors.secondary)
+                }
+                QingQiCard {
+                    Text("广告拦截规则")
+                        .font(.headline)
+                    Text("暂不发布 URL Filter 规则。待 entitlement、PIR 服务和真机证据完整后重新评估。")
+                        .foregroundStyle(QingQiColors.secondary)
                 }
             }
             .navigationTitle("规则")
@@ -48,26 +86,39 @@ struct RulesView: View {
 
 struct DiagnosticsView: View {
     @EnvironmentObject private var model: QingQiAppModel
+
     var body: some View {
         NavigationStack {
             QingQiPage {
-                Text("先弄清问题，再调整设置。").foregroundStyle(QingQiColors.secondary)
+                Text("先弄清问题，再调整设置。")
+                    .foregroundStyle(QingQiColors.secondary)
                 QingQiCard {
-                    Label("受控自检尚未可用", systemImage: "stethoscope").font(.title2.bold())
-                    Text("当前不会发送真实请求，也不会读取浏览记录。").foregroundStyle(QingQiColors.secondary)
-                    QingQiPrimaryButton("重新读取配置") { Task { await model.refresh() } }.disabled(model.isBusy)
+                    Label("系统能力自检", systemImage: "stethoscope")
+                        .font(.title2.bold())
+                    Text("短信过滤：待用户在系统设置中启用扩展")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Text("来电过滤：待用户在电话设置中启用扩展")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Text("广告拦截：暂缓，不发送 URL 请求")
+                        .foregroundStyle(QingQiColors.secondary)
+                    QingQiPrimaryButton("重新读取配置") { Task { await model.refresh() } }
+                        .disabled(model.isBusy)
                 }
                 QingQiCard {
                     Text("检查项目").font(.headline)
-                    Text("系统配置：\(model.stateTitle)")
-                    Text("规则数据：示例，不代表生效")
-                    Text("受控资源：未发送真实请求")
-                    Text("PIR 服务：尚未接入")
+                    Text("短信扩展：未安装")
+                    Text("来电扩展：未安装")
+                    Text("广告 URL Filter：暂缓")
+                    Text("诊断上传：默认不上报")
                 }
                 if !model.events.isEmpty {
                     QingQiCard {
                         Text("配置事件").font(.headline)
-                        ForEach(model.events.prefix(5)) { Text($0.name).font(.footnote).foregroundStyle(QingQiColors.secondary) }
+                        ForEach(model.events.prefix(5)) { event in
+                            Text(event.name)
+                                .font(.footnote)
+                                .foregroundStyle(QingQiColors.secondary)
+                        }
                     }
                 }
             }
@@ -79,13 +130,12 @@ struct DiagnosticsView: View {
 struct SettingsView: View {
     @EnvironmentObject private var model: QingQiAppModel
     @AppStorage("appearance") private var appearance = 0
-    @AppStorage("qingqi.pirServerURL") private var pirServerURL = ""
-    @AppStorage("qingqi.pirAuthenticationToken") private var pirAuthenticationToken = ""
-    @AppStorage("qingqi.shouldFailClosed") private var shouldFailClosed = true
+
     var body: some View {
         NavigationStack {
             QingQiPage {
-                Text("简单设置，清楚掌控。").foregroundStyle(QingQiColors.secondary)
+                Text("简单设置，清楚掌控。")
+                    .foregroundStyle(QingQiColors.secondary)
                 QingQiCard {
                     Text("外观").font(.headline)
                     Picker("外观", selection: $appearance) {
@@ -97,35 +147,33 @@ struct SettingsView: View {
                     .accessibilityLabel("外观模式")
                 }
                 QingQiCard {
-                    Text("真实 URL Filter").font(.headline)
-                    TextField("PIR 服务地址，例如 http://Mac局域网地址:8080", text: $pirServerURL)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.URL)
-                    SecureField("PIR 认证 token", text: $pirAuthenticationToken)
-                    Toggle("PIR 失败时阻止请求", isOn: $shouldFailClosed)
-                    Text("需要 Apple URL Filter entitlement、官方 Bloom prefilter 和可访问的 PIR 服务；未配置时不会显示成功。")
-                        .font(.footnote).foregroundStyle(QingQiColors.secondary)
-                    QingQiPrimaryButton("保存并请求系统授权") { Task { await model.requestEnable() } }
-                        .disabled(model.isBusy)
-                    Button("关闭系统过滤") { Task { await model.disable() } }
-                        .frame(minHeight: 44)
-                    Button("移除系统过滤配置", role: .destructive) { Task { await model.removeConfiguration() } }
-                        .frame(minHeight: 44)
+                    Text("短信与来电过滤").font(.headline)
+                    Text("正式版将在这里提供规则开关、数据源和系统扩展启用状态。当前仅展示产品结构。")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Label("短信过滤扩展：待接入", systemImage: "message")
+                        .frame(minHeight: 44, alignment: .leading)
+                    Label("来电识别与拦截：待接入", systemImage: "phone")
+                        .frame(minHeight: 44, alignment: .leading)
                 }
                 QingQiCard {
                     Text("隐私与数据").font(.headline)
-                    Text("浏览记录：不读取")
+                    Text("短信过滤扩展不能直接访问网络；来电目录需要系统批量加载。")
                     Text("诊断上传：默认不上报")
-                    Text("正式 PIR 与规则分发的服务端数据流需在 G0 后实测披露。").foregroundStyle(QingQiColors.secondary)
-                    Button("清除本地配置事件") { Task { await model.clearEvents() } }.frame(minHeight: 44)
+                    Text("广告拦截：暂缓，不安装 URL Filter 配置")
+                        .foregroundStyle(QingQiColors.secondary)
+                    Button("清除本地配置事件") { Task { await model.clearEvents() } }
+                        .frame(minHeight: 44)
                 }
                 QingQiCard {
                     Text("反馈草稿").font(.headline)
                     Text("问题类别：\(model.feedback.category.rawValue)")
-                    Button("保存当前草稿") { Task { await model.saveFeedback() } }.frame(minHeight: 44)
+                    Button("保存当前草稿") { Task { await model.saveFeedback() } }
+                        .frame(minHeight: 44)
                 }
-                QingQiCard { Text("帮助").font(.headline); Text("真实版本提供可验证的关闭与移除入口。") }
+                QingQiCard {
+                    Text("帮助").font(.headline)
+                    Text("系统过滤扩展需要在 iPhone 设置中单独启用。")
+                }
             }
             .navigationTitle("设置")
         }

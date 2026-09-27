@@ -81,6 +81,20 @@ https://developer.apple.com/documentation/networkextension/dns-settings
 https://developer.apple.com/documentation/networkextension/nednssettingsmanager
 ```
 
+## S12 · IdentityLookup Message Filter Extension
+支持：短信过滤扩展的系统边界、未知发送者 SMS/MMS 范围及扩展处理限制。
+
+```text
+https://developer.apple.com/documentation/identitylookup/sms-and-mms-message-filtering
+```
+
+## S13 · CallKit Call Directory
+支持：Call Directory 扩展的号码识别/阻止、批量加载与系统管理边界。
+
+```text
+https://developer.apple.com/documentation/callkit/identifying-and-blocking-calls
+```
+
 ## 设计假设与待核验项
 
 名称/商标可用性、目标 App 覆盖率、规则来源许可、最低后端成本、用户增长模型、PIR 生产容量、审核结果均未被本包验证。

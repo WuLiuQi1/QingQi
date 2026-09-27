@@ -5,15 +5,9 @@ struct QingQiApp: App {
     @StateObject private var model: QingQiAppModel
 
     init() {
-        #if canImport(NetworkExtension)
-        if #available(iOS 26.0, *) {
-            _model = StateObject(wrappedValue: QingQiAppModel(engine: NativeURLFilterEngine()))
-        } else {
-            _model = StateObject(wrappedValue: QingQiAppModel())
-        }
-        #else
+        // V2 当前主线是短信过滤与来电目录；URL Filter 保留在研究 target，
+        // 不在 Release 主 App 中伪装成已启用的广告拦截能力。
         _model = StateObject(wrappedValue: QingQiAppModel())
-        #endif
     }
 
     var body: some Scene { WindowGroup { QingQiRootView(model: model) } }
@@ -29,7 +23,7 @@ struct QingQiRootView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("原生 URL Filter · 需要系统授权与 PIR 配置").font(.caption).foregroundStyle(QingQiColors.accent).frame(maxWidth: .infinity).padding(9).background(QingQiColors.soft)
+            Text("短信与来电保护 · 广告拦截暂缓").font(.caption).foregroundStyle(QingQiColors.accent).frame(maxWidth: .infinity).padding(9).background(QingQiColors.soft)
             TabView(selection: $tab) {
                 OverviewView().environmentObject(model).tabItem { Label("概览", systemImage: "leaf") }.tag(0)
                 RulesView().tabItem { Label("规则", systemImage: "line.3.horizontal.decrease.circle") }.tag(1)
