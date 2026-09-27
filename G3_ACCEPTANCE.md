@@ -14,7 +14,7 @@
 ## 阻塞原因
 
 - 当前主机为 Windows，没有 Xcode、iOS 26 SDK 或 `xcodebuild`。
-- 没有 Apple Developer 团队、URL Filter entitlement、签名 profile 或普通非受监管 iPhone。
+- 当前只有 Apple Personal Team；普通 App 签名和 iPhone 13 Pro 已验证，但 `url-filter-provider` entitlement、extension profile 和 URL Filter 能力尚未验证。
 - 没有 PIR 服务、Bloom/PIR 共同数据集和成本测量。
 - 没有真实受控允许/阻止 URL 结果、关闭/移除回读结果或组合网络测试。
 

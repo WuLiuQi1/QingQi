@@ -1,6 +1,6 @@
 # 交付验证记录
 
-验证日期：2026-09-26。
+验证日期：2026-09-27。
 
 ## 已实际执行
 
@@ -13,8 +13,8 @@
 
 ## 尚未执行
 
-- Mac Xcode + Apple iOS SDK 的编译、类型检查、预览及运行。
-- iPhone 真机的 Network Extension 能力、授权与分发验证。
+- 本机 Windows 上的 Mac Xcode + Apple iOS SDK 编译；GitHub macOS runner 已完成对应构建链验证。
+- iPhone 真机的 Network Extension entitlement、系统授权、受控 URL 裁决与正式分发验证。
 - 真实广告拦截、目标 App 兼容性、PIR 部署和成本测量。
 - 生产规则、签名发布、隐私与审核验证。
 - 完整无障碍审计与系统级性能/能耗测试。
@@ -25,6 +25,8 @@
 ## 真机回归补充
 
 2026-09-27：维护者在 iPhone 13 Pro / iOS 27 上使用爱思个人 Apple ID 签名安装最新 IPA。结果：App 正常启动，深色模式正常，未发现异常。该结果只覆盖 UI/数据层测试包，不代表真实 URL Filter 或广告过滤能力。
+
+2026-09-27：GitHub Actions macOS runner 完成 Swift Core tests、XcodeGen、`iphoneos` Release 无签名构建、IPA 打包和 SHA-256 产物校验。当前构建仍是 App-only，不含生产 Network Extension target。
 
 ## 视觉检查
 已打开并检查概览页及四页总图；总图由实际浏览器页面截图排版生成。

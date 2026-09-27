@@ -13,8 +13,8 @@
 
 ## 未完成准入
 
-真实 `NEURLFilterManager`、URL Filter control extension、授权回读、PIR/Bloom、反馈网络提交、Apple SDK 编译、真机和无障碍审计均未完成。它们需要 G0 环境，不以 Mock 或静态代码代替。
+真实 `NEURLFilterManager`、URL Filter control extension、授权回读、PIR/Bloom、反馈网络提交、Network Extension entitlement 和系统级无障碍审计仍未完成。Apple SDK 编译已由 GitHub macOS runner 完成，普通真机已完成 UI/深色模式安装回归；这些结果不替代 G0 的系统过滤证据。
 
 ## 验证
 
-本机为 Windows，未执行 `swift test`、Xcode 构建或 iPhone 测试。GitHub Actions 工作流已配置，待项目进入 GitHub 后运行。
+本机为 Windows，未执行本地 `swift test` 或 Xcode。GitHub Actions 已实际执行 Core tests、XcodeGen、iPhoneOS 无签名构建和 IPA 打包；维护者已在 iPhone 13 Pro / iOS 27 完成安装、启动和深色模式回归。

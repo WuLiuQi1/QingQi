@@ -13,4 +13,4 @@
 
 刻意未实现：Apple 专用 Bloom/PIR 生成器、生产签名密钥、真实 PIR 数据库和远端发布服务。G2 只能在获得官方样例工具与许可后接入，不能用自定义算法宣称兼容 Apple URL Filter。
 
-本机为 Windows，未执行 Swift 测试。GitHub Actions 已包含 `swift test --package-path Core`，需在 macOS runner 上运行。
+本机为 Windows，未执行 Swift 测试；GitHub macOS runner 已实际执行 `swift test --package-path Core` 并通过。Apple 专用 Bloom/PIR 工具、生产数据库、签名密钥和发布服务仍属于外部准入项，不能在当前环境伪造完成。
