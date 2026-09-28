@@ -13,7 +13,6 @@ targets:
       - path: QingQiApp
     dependencies:
       - package: QingQiCore
-      - target: QingQiURLFilterExtension
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi
       SWIFT_VERSION: 6.0
@@ -35,4 +34,24 @@ targets:
       SWIFT_VERSION: 6.0
       INFOPLIST_FILE: QingQiURLFilterExtension/Info.plist
       CODE_SIGN_ENTITLEMENTS: QingQiURLFilterExtension/QingQiURLFilterExtension.entitlements
+      TARGETED_DEVICE_FAMILY: "1"
+  QingQiMessageFilterExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: QingQiMessageFilterExtension
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi.messagefilter
+      SWIFT_VERSION: 6.0
+      INFOPLIST_FILE: QingQiMessageFilterExtension/Info.plist
+      TARGETED_DEVICE_FAMILY: "1"
+  QingQiCallDirectoryExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: QingQiCallDirectoryExtension
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi.calldirectory
+      SWIFT_VERSION: 6.0
+      INFOPLIST_FILE: QingQiCallDirectoryExtension/Info.plist
       TARGETED_DEVICE_FAMILY: "1"
