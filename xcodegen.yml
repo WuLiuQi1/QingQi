@@ -45,6 +45,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi.messagefilter
       SWIFT_VERSION: 6.0
+      GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_FILE: QingQiMessageFilterExtension/Info.plist
       TARGETED_DEVICE_FAMILY: "1"
   QingQiCallDirectoryExtension:
@@ -55,5 +56,6 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi.calldirectory
       SWIFT_VERSION: 6.0
+      GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_FILE: QingQiCallDirectoryExtension/Info.plist
       TARGETED_DEVICE_FAMILY: "1"
