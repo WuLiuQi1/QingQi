@@ -70,10 +70,11 @@ jobs:
       - name: Build UI-only IPA for personal signing diagnostics
         run: |
           set -o pipefail
-          cp xcodegen.yml build/xcodegen-ui-only.yml
-          sed -i '' '/target: QingQiMessageFilterExtension/d' build/xcodegen-ui-only.yml
-          sed -i '' '/target: QingQiCallDirectoryExtension/d' build/xcodegen-ui-only.yml
-          xcodegen generate --spec build/xcodegen-ui-only.yml
+          cp xcodegen.yml xcodegen-ui-only.yml
+          sed -i '' '/target: QingQiMessageFilterExtension/d' xcodegen-ui-only.yml
+          sed -i '' '/target: QingQiCallDirectoryExtension/d' xcodegen-ui-only.yml
+          xcodegen generate --spec xcodegen-ui-only.yml
+          rm -f xcodegen-ui-only.yml
           xcodebuild -project QingQi.xcodeproj -scheme QingQi \
             -configuration Release -sdk iphoneos \
             -destination 'generic/platform=iOS' \
