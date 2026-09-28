@@ -13,6 +13,8 @@ targets:
       - path: QingQiApp
     dependencies:
       - package: QingQiCore
+      - target: QingQiMessageFilterExtension
+      - target: QingQiCallDirectoryExtension
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.example.qingqi
       SWIFT_VERSION: 6.0
