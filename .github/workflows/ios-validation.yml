@@ -7,6 +7,8 @@ on:
     paths:
       - 'QingQiApp/**'
       - 'QingQiURLFilterExtension/**'
+      - 'QingQiMessageFilterExtension/**'
+      - 'QingQiCallDirectoryExtension/**'
       - 'Core/**'
       - 'xcodegen.yml'
       - '.github/workflows/ios-validation.yml'
@@ -63,6 +65,35 @@ jobs:
           path: |
             build/QingQi-unsigned.ipa
             build/QingQi-unsigned.ipa.sha256
+          if-no-files-found: error
+          retention-days: 14
+      - name: Build UI-only IPA for personal signing diagnostics
+        run: |
+          set -o pipefail
+          cp xcodegen.yml build/xcodegen-ui-only.yml
+          sed -i '' '/target: QingQiMessageFilterExtension/d' build/xcodegen-ui-only.yml
+          sed -i '' '/target: QingQiCallDirectoryExtension/d' build/xcodegen-ui-only.yml
+          xcodegen generate --spec build/xcodegen-ui-only.yml
+          xcodebuild -project QingQi.xcodeproj -scheme QingQi \
+            -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/UIDerivedData \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY='' build 2>&1 | tee build/ui-only-xcodebuild.log
+          mkdir -p build/ui-only-package/Payload
+          ditto build/UIDerivedData/Build/Products/Release-iphoneos/QingQi.app build/ui-only-package/Payload/QingQi.app
+          rm -rf build/ui-only-package/Payload/QingQi.app/PlugIns
+          cd build/ui-only-package
+          zip -qry ../QingQi-ui-only.ipa Payload
+          cd ..
+          shasum -a 256 QingQi-ui-only.ipa > QingQi-ui-only.ipa.sha256
+      - name: Upload UI-only IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: QingQi-ui-only-iphoneos
+          path: |
+            build/QingQi-ui-only.ipa
+            build/QingQi-ui-only.ipa.sha256
           if-no-files-found: error
           retention-days: 14
       - name: Upload diagnostic logs
